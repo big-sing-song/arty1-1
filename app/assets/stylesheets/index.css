@@ -1,0 +1,63 @@
+.underlines h1:hover {
+    color:rgb(151, 147, 147);
+}
+.posts-container {
+    margin-top: 90px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    
+}
+
+.post {
+    display:flex;
+    margin-bottom: 46px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgb(151, 147, 147);
+    
+}
+
+.right-container {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    margin-left: 30px;
+    text-decoration: none;
+}
+
+.third-container {
+    font-size: 18px;
+    display: flex;
+    justify-content: space-around;
+}
+
+a{
+    color:black;
+}
+
+.btn--red {
+    color: white;
+    background-color: rgb(189, 21, 63);
+    /* border-bottom: 5px solid #ccc100; */
+  }
+.btn--red.btn--cubic {
+    border-bottom: 5px solid #9f000c;
+}
+
+.btn--red.btn--cubic:hover {
+    margin-top: 3px;
+    border-bottom: 2px solid #9f000c;
+    color: white;
+}
+
+
+.btn--radius {
+    border-radius: 100vh;
+}
+
+.fa-position-right {
+    position: absolute;
+    top: calc(50% - .5em);
+    right: 1rem;
+}
