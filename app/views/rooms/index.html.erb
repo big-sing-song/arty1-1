@@ -1,0 +1,56 @@
+<header>
+    <div class="title">
+        <%= link_to posts_path, class:"underlines", method: :get do %>
+            <h1>Arty</h1>
+        <% end %>
+    </div>
+    <div class="search">
+        <%= form_tag({controller:"posts",action:"index",}, method: :get, class: "sform") do %>
+            <%= text_field_tag :search, '', class: "sbox", placeholder:"キーワードを検索" %>
+            <%# <%= submit_tag '検索する', {id: "sbtn"}  %>
+            <%= button_tag sanitize('<i class="fa fa-search"></i>'), :type => "submit", :class =>"sbtn" %>
+        <% end %>
+    </div>
+    <ul class="icons">
+        <li>
+            <%= link_to new_post_path, class:"icon", method: :get do %>
+                <i class="far fa-plus-square"></i>
+            <% end %>
+        </li>
+        <li><% if user_signed_in? %>
+            <%= link_to user_path(current_user.id), class:"icon", method: :get do %>
+                <i class="far fa-user"></i>
+            <% end %>
+            <% end %>
+        </li>
+        <li class="icon">
+          <%= link_to rooms_path, class:"icon", method: :get do %>
+            <i class="far fa-comments"></i>
+          <% end %>
+        </li>
+    </ul>
+</header>
+<div class="main">
+  <div class="rooms-wrapper">
+    <h2>DM一覧</h2>
+      <% @another_entries.each do |entry| %>
+        <div class="talkroom">
+          <div>
+            <%= image_tag entry.user.image_url, size: "50x50", class:"user-image" if entry.user.image? %>
+          </div>
+          <div class="name name-room">
+            <%= entry.user.name %>
+          </div>
+          <div class="message-content">
+            <%= Message.find_by(id: entry.room.message_ids.last)&.content %>
+          </div>
+          <%= link_to room_path(entry.room),class:"btn-room underlines" do %>
+            <button type="button" class="btn btn-danger">
+              チャットへ
+            </button>
+          <% end %>
+        </div>
+      <% end %>
+  </div>
+  <img class="omake-logo" src="/assets/logo.ico">
+</div>
