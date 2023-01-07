@@ -1,0 +1,146 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+@import "bootstrap";
+@import 'font-awesome-sprockets';
+@import 'font-awesome';
+
+ul {
+    list-style: none;
+}
+
+.image {
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+.name {
+    font-size: 24px;
+    font-weight: bold;
+    font-family:  "游ゴシック", "M PLUS Rounded 1c", sans-serif;
+}
+
+header {
+    position: fixed;
+    z-index: 1;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    background: #e64683;
+    font-size: 13px;
+    height: 54px;
+    display: flex;
+    justify-content: space-between;
+}
+
+header h1 {
+    margin-left: 0px;
+    text-align: center;
+    height:4px;
+    line-height:44px;
+    color: #eee;
+    font-family: 'Pacifico', cursive, sans-serif;
+    width: 150px;
+    text-decoration: none;
+}
+
+
+
+/* 検索 */
+.sform {
+    /* position:relative; */
+    /* margin-bottom:20px; */
+    display: flex;
+    justify-content: flex-end;
+    
+    align-items: center;
+    height: 50px;
+    /* width:300px; */
+    
+}
+.title {
+    flex-grow: 0;
+}
+
+.search {
+    flex-grow: 3;
+}
+.sbox {
+    height:34px;
+    /* padding:0 2px;  */
+    border-radius:5px;
+    max-width:360px;
+    /* outline:0; */
+    width: 100%;
+    background-color:#eee;	
+}
+.sbtn {
+    height:30px;
+    width: 30px;
+    border-radius:5px;
+    background-color: rgb(233, 231, 231);
+    color:rgb(131, 129, 129);
+    border:none;
+    font-size:20px;/*アイコンサイズ*/
+}
+.sbtn:hover{
+    color:#7fbfff;
+    }
+.icons {
+    display:flex;
+    /* flex-direction: row-reverse; */
+    justify-content: flex-end;
+    margin-right: 20px;
+    width: 180px;
+    flex-grow: 1;
+}
+
+.icon {
+    font-size: 30px;
+    color:#eee;
+    margin-left: 8px;
+}
+
+.main {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.underlines {
+    text-decoration: none;
+    border: none;  /* 枠線を消す */
+    outline: none; /* クリックしたときに表示される枠線を消す */
+    background: transparent; /* 背景の灰色を消す */
+    color:black;
+}
+
+.underlines:hover {
+    text-decoration: none;
+    border: none;  /* 枠線を消す */
+    outline: none; /* クリックしたときに表示される枠線を消す */
+    background: transparent; /* 背景の灰色を消す */
+    color: rgb(19, 79, 83);
+}
+
+.user-image {
+    border-radius: 50%;  /* 角丸半径を50%にする(=円形にする) */
+    object-fit: cover; /* 縦横比固定したまま上2つの縦横の範囲内に収まるように配置する */
+}
+
+.omake-logo {
+    position: absolute;
+    right: 2rem;
+    bottom: 2rem;
+}
