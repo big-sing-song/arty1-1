@@ -1,0 +1,43 @@
+<style>
+body {
+  background-image: url("/assets/hobby1.jpg");
+  background-size:cover;
+  background-color:rgba(255,255,255,0.5);
+  background-blend-mode:lighten;
+  background-attachment: fixed;
+}
+</style>
+<div class="signin-header">
+<section>
+<img src="/assets/logo.ico" alt="Arty">
+</section>
+<section>
+<h1 class="signin-title">おかえりなさい！</h1>
+</section>
+</div>
+<div class="form-wrapper">
+  <h1>Log In</h1>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div class="form-item">
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      <%# <label for="email"></label>
+      <input type="email" name="email" required="required" placeholder="Email Address"></input> %>
+    </div>
+    <div class="form-item">
+      <%= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: "current-password" %>
+      <%# <label for="password"></label>
+      <input type="password" name="password" required="required" placeholder="Password"></input> %>
+    </div>
+    <div class="actions button-panel">
+      <%= f.submit "Log in", class:"button-panel" %>
+    </div>
+  <% end %>
+    <%# <div class="button-panel">
+      <input type="submit" class="button" title="Sign In" value="Sign In"></input>
+    </div> %>
+  <div class="form-footer">
+    <%= render "users/shared/links" %>
+  </div>
+</div>
