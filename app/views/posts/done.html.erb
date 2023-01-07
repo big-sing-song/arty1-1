@@ -1,0 +1,56 @@
+<style>
+body {
+  background-image: url("/assets/done1.png");
+  
+  background-color:rgba(255,255,255,0.5);
+  background-blend-mode:lighten;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  height: 100%;
+}
+</style>
+<header>
+    <div class="title">
+        <%= link_to posts_path, class:"underlines", method: :get do %>
+            <h1>Arty</h1>
+        <% end %>
+    </div>
+    <div class="search">
+        <%= form_tag({controller:"posts",action:"index",}, method: :get, class: "sform") do %>
+            <%= text_field_tag :search, '', class: "sbox", placeholder:"キーワードを検索" %>
+            <%# <%= submit_tag '検索する', {id: "sbtn"}  %>
+            <%= button_tag sanitize('<i class="fa fa-search"></i>'), :type => "submit", :class =>"sbtn" %>
+        <% end %>
+    </div>
+    <ul class="icons">
+        <li>
+            <%= link_to new_post_path, class:"icon", method: :get do %>
+                <i class="far fa-plus-square"></i>
+            <% end %>
+        </li>
+        <li><% if user_signed_in? %>
+            <%= link_to user_path(current_user.id), class:"icon", method: :get do %>
+                <i class="far fa-user"></i>
+            <% end %>
+            <% end %>
+        </li>
+        <li>
+            <%= link_to rooms_path, class:"icon", method: :get do %>
+                <i class="far fa-comments"></i>
+            <% end %>
+        </li>
+    </ul>
+</header>
+<div class="main">
+<div class="done-container">
+<br><br>
+<h1>購入完了！</h1>
+<br><br>
+<% if user_signed_in? %>
+<%= link_to user_path(current_user.id), class:"underlines done-link", method: :get do %>
+    購入一覧へ
+<% end %>
+<% end %>
+<%= link_to 'DM一覧へ', rooms_path, class:"underlines done-link" %>
+</div>
+</div>
