@@ -1,0 +1,43 @@
+// Place all the styles related to the rooms controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+.talkroom {
+    display: flex;
+    border-top: 1px solid #6d6b6b;
+    padding: 1rem 10rem;
+}
+.name-room {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rooms-wrapper h2 {
+    margin-left: 3rem;
+}
+
+.message-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-room {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10em;
+}
+
+.chat-wrapper {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.room {
+    padding-left: 5rem;
+}
+
+.chat-form {
+    margin-top: 3rem;
+}
