@@ -1,0 +1,160 @@
+<header>
+    <div class="title">
+        <%= link_to posts_path, class:"underlines", method: :get do %>
+            <h1>Arty</h1>
+        <% end %>
+    </div>
+    <div class="search">
+        <%= form_tag({controller:"posts",action:"index",}, method: :get, class: "sform") do %>
+            <%= text_field_tag :search, '', class: "sbox", placeholder:"キーワードを検索" %>
+            <%# <%= submit_tag '検索する', {id: "sbtn"}  %>
+            <%= button_tag sanitize('<i class="fa fa-search"></i>'), :type => "submit", :class =>"sbtn" %>
+        <% end %>
+    </div>
+    <ul class="icons">
+        <li>
+            <%= link_to new_post_path, class:"icon", method: :get do %>
+                <i class="far fa-plus-square"></i>
+            <% end %>
+        </li>
+        <li><% if user_signed_in? %>
+            <%= link_to user_path(current_user.id), class:"icon", method: :get do %>
+                <i class="far fa-user"></i>
+            <% end %>
+            <% end %>
+        </li>
+        <li class="icon">
+          <%= link_to rooms_path, class:"icon", method: :get do %>
+              <i class="far fa-comments"></i>
+          <% end %>
+        </li>
+    </ul>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js" type="text/javascript"></script>
+</header>
+<div class="main">
+  <div class="mypage">
+    <div class="left-container">
+      <%= image_tag @user.image_url, size: "200x200", class:"user-image" if @user.image? %>
+    </div>
+    <div class="right-container">
+      <span class="name"><%= @user.name %></span>
+      <p><%= @user.profile %></p>
+      <p>所持金<i class="fab fa-bitcoin" style="color: gold;"></i>：<%= @user.deposit %></p>
+      <% if current_user.id == @user.id %>
+      <div class="fourth-show">
+          <section>
+              <%= link_to edit_user_registration_path do %>
+                  <button type="button" class="btn btn-primary"><i class="far fa-edit"></i></button>
+              <% end %>
+          </section>
+          <section>
+              <%= button_to 'ログアウト', destroy_user_session_path, class:"btn btn-secondary", method: :delete %>
+          </section>
+      </div>
+      <% else %>
+        <% if @isRoom == true %>
+          <button type="button" class="btn btn-danger">
+            <a class="white" href="/rooms/<%= @roomId %>">チャットへ</a>
+          </button>
+        <% else %>
+          <%= form_for @room do |f| %>
+            <%= fields_for @entry do |e| %>
+              <%= e.hidden_field :user_id, :value=> @user.id %>
+            <% end %>
+              <%= f.submit "チャットを始める" , class:"btn btn-danger"%>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">購入済</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">いいね</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">投稿</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <% @user.purchased_posts.each do |t| %>
+      <div class="card" style="width: 18rem;">
+        <% if current_user.already_purchased?(t) %>
+          <div>
+            <%= link_to image_tag(t.image_url, :alt => t.contents, :width => 286, :height => 200), t.image_url, data:{lightbox: "group"} %>
+          </div>
+        <% else %>
+          <div class="image">
+              <%= image_tag(t.image_url, :alt => t.contents, :width => 286, :height => 200) %>
+          </div>
+        <% end %>
+        <div class="card-body">
+          <%= image_tag t.user.image_url, size: "50x50", class:"user-image" if t.user.image? %>
+          <%= link_to user_path(t.user_id), class:"name underlines" do %>
+            <%= t.user.name %>
+          <% end %>
+          <%= link_to post_path(t.id), class:"underlines" do %>
+            <%= t.contents.truncate(8) %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <% @user.liked_posts.each do |t| %>
+      <div class="card" style="width: 18rem;">
+        <% if current_user.already_purchased?(t) %>
+            <div>
+                <%= image_tag(t.image_url, :alt => t.contents, :width => 286, :height => 200) %>
+            </div>
+        <% else %>
+            <div class="image">
+                <%= image_tag(t.image_url, :alt => t.contents, :width => 286, :height => 200) %>
+            </div>
+        <% end %>
+        <div class="card-body">
+          <%= image_tag t.user.image_url, size: "50x50", class:"user-image" if t.user.image? %>
+          <%= link_to user_path(t.user.id), class:"name underlines" do %>
+            <%= t.user.name %>
+          <% end %>
+          <%= link_to post_path(t.id), class:"underlines" do %>
+            <%= t.contents.truncate(8) %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+    <% @user.posts.each do |t| %>
+      <div class="card" style="width: 18rem;">
+        <% if current_user.id == t.user_id %>
+            <div>
+                <%= image_tag(t.image_url, :alt => t.contents, :width => 286, :height => 200) %>
+            </div>
+                <%# <p>購入済み</p> %>
+        <% else %>
+            <div class="image">
+                <%= image_tag(t.image_url, :alt => t.contents, :width => 286, :height => 200) %>
+            </div>
+        <% end %>
+        <div class="card-body">
+          <%= image_tag t.user.image_url, size: "50x50", class:"user-image" if t.user.image? %>
+          <%= link_to user_path(t.user.id), class:"name underlines" do %>
+            <%= t.user.name %>
+          <% end %>
+          <%= link_to post_path(t.id), class:"underlines" do %>
+            <%= t.contents.truncate(8) %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
