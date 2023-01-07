@@ -1,0 +1,80 @@
+<%= stylesheet_link_tag "new", :media => "all" %>
+<style>
+body {
+  background-image: url("/assets/new1.jpg");
+  background-size:cover;
+  background-color:rgba(255,255,255,0.5);
+  background-blend-mode:lighten;
+  background-attachment: fixed;
+}
+</style>
+<header>
+    <div class="title">
+        <%= link_to posts_path, class:"underlines", method: :get do %>
+            <h1>Arty</h1>
+        <% end %>
+    </div>
+    <div class="search">
+        <%= form_tag({controller:"posts",action:"index",}, method: :get, class: "sform") do %>
+            <%= text_field_tag :search, '', class: "sbox", placeholder:"キーワードを検索" %>
+            <%# <%= submit_tag '検索する', {id: "sbtn"}  %>
+            <%= button_tag sanitize('<i class="fa fa-search"></i>'), :type => "submit", :class =>"sbtn" %>
+        <% end %>
+    </div>
+    <ul class="icons">
+        <li>
+            <%= link_to new_post_path, class:"icon", method: :get do %>
+                <i class="far fa-plus-square"></i>
+            <% end %>
+        </li>
+        <li><% if user_signed_in? %>
+            <%= link_to user_path(current_user.id), class:"icon", method: :get do %>
+                <i class="far fa-user"></i>
+            <% end %>
+            <% end %>
+        </li>
+        <li class="icon">
+            <%= link_to rooms_path, class:"icon", method: :get do %>
+                <i class="far fa-comments"></i>
+            <% end %>
+        </li>
+    </ul>
+</header>
+<div class="main">
+    <%= form_for @post do |f| %>
+        <div class="new-box">
+            <h3>新規投稿</h3>
+        <!--<div class="field">
+            <%= f.label :title %>
+            <%= f.text_field :title, :size => 140 %>
+        </div>-->
+            <div class="field">
+                <%= f.label :image（必須） %>
+                <%= f.file_field :image %>
+            </div>
+            <div class="field">
+                <%= f.text_area :contents, placeholder: "キャプションを書く（必須）", :size => '40x3' %>
+            </div>
+            <div class="field">
+                <%= f.label :price（必須） %><i class="fab fa-bitcoin" style="color: gold;"></i>
+                <%= f.number_field :price, placeholder: "数字のみ", size: 5%>
+            </div>
+            <div class="field">
+                <div class="check_box">
+                    <%= f.collection_check_boxes(:tag_ids, Tag.all, :id, :name) do |tag| %>
+                        <div class='form-check'>
+                            <%= tag.label do %>
+                                <%= tag.check_box %>
+                                #<%= tag.text %>
+                            <% end %>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+        <div class="nbtn">
+            <%= f.submit "投稿",class:"btn-gradient-simple" %>
+        </div>
+    <% end %>
+    <img class="omake-logo" src="/assets/logo.ico">
+</div>
