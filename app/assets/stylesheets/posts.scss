@@ -1,0 +1,101 @@
+// Place all the styles related to the posts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+// img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+// }
+.btn {
+    outline: none;
+}
+
+
+
+.dropdown-toggle {
+    background-color: #e64683 !important;
+    border-color: #e64683 !important;
+
+}
+
+.dropdown-toggle:hover {
+    background-color: #e64669 !important;
+    border-color: #e64669 !important;
+}
+
+.dropdown-toggle:active {
+    background-color: #e64669 !important;
+    border-color: #e64669 !important;
+}
+.dropdown-toggle {
+    font-size: 25px !important;
+    font-weight: bold !important;
+}
+
+.tag-box{
+    // background-color: rgb(77, 67, 116);
+    // border: 1px solid #3a3737;
+    // width: 140px;
+    border-radius: 2px;
+    a{
+        text-decoration: none;
+        color: black;
+        font-size: 20px;
+    }
+    a:hover {
+        text-decoration: none;
+        color: aquamarine;
+        font-size: 20px;
+    }
+}
+
+// .dropdown-menu {
+//     background-color: rgb(104, 73, 122);
+// }
+
+
+
+// .tag-box a:not([href]) {
+//     color: white;
+//     text-decoration: none;
+// }
+
+// .tag-box a:not([href]):hover {
+//     color: rgb(121, 242, 247);
+//     text-decoration: none;
+// }
+
+// .boards__searchForm {
+//     display: flex;
+//     flex-direction: column;
+// }
+
+// .tags {
+//     position: fixed;
+//     top: 64px;
+//     left: 10px;
+//     text-align: center;
+// }
+
+
+
+.tag-display {
+    color:rgb(127, 255, 244);
+    text-decoration: none;
+}
+
+.tag-display:hover {
+    color:rgb(127, 197, 255);
+    text-decoration: none;
+}
+
+.done-container {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.done-link {
+    font-size: 25px;
+}
