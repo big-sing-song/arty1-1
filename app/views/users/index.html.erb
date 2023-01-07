@@ -1,0 +1,73 @@
+<header>
+    <div class="title">
+        <%= link_to posts_path, class:"underlines", method: :get do %>
+            <h1>Arty</h1>
+        <% end %>
+    </div>
+    <div class="search">
+        <%= form_tag({controller:"posts",action:"index",}, method: :get, class: "sform") do %>
+            <%= text_field_tag :search, '', class: "sbox", placeholder:"キーワードを検索" %>
+            <%# <%= submit_tag '検索する', {id: "sbtn"}  %>
+            <%= button_tag sanitize('<i class="fa fa-search"></i>'), :type => "submit", :class =>"sbtn" %>
+        <% end %>
+    </div>
+    <ul class="icons">
+        <li>
+            <%= link_to new_post_path, class:"icon", method: :get do %>
+                <i class="far fa-plus-square"></i>
+            <% end %>
+        </li>
+        <li><% if user_signed_in? %>
+            <%= link_to user_path(current_user.id), class:"icon", method: :get do %>
+                <i class="far fa-user"></i>
+            <% end %>
+            <% end %>
+        </li>
+        <li class="icon">
+            <%= link_to rooms_path, class:"icon", method: :get do %>
+            <i class="far fa-comments"></i>
+            <% end %>
+        </li>
+    </ul>
+</header>
+<div class="main">
+    <h1>DMサンプルアプリ</h1>
+    <% if user_signed_in? %>
+    <h2>Hello <%= current_user.name %></h2>
+        <% @users.each do |u| %>
+        <p><a href="/users/<%= u.id %>"><%= u.name %></a></p>
+
+            <%# currentUserEntry=Entry.where(user_id: current_user.id) %>
+            <%# userEntry=Entry.where(user_id: u.id) %>
+            <%# if u.id == current_user.id %>
+            <%# else %>
+                <%# currentUserEntry.each do |cu| %>
+                    <%# userEntry.each do |t| %>
+                        <%# if cu.room_id == t.room_id %>
+                            <%# isRoom = true %>
+                            <%# roomId = cu.room_id %>
+                        <%# end %>
+                    <%# end %>
+                <%# end %>
+                <%# if isRoom %>
+                <%# else %>
+                    <%# room = Room.new %>
+                    <%# entry = Entry.new %>
+                <%# end %>
+            <%# end %>
+        <%# end %>
+
+        <%# if isRoom == true %>
+        <%# <p><a href="/rooms/<%= roomId">チャットへ</a> %>
+
+
+
+        <hr>
+        <% end %>
+        <%= button_to "ログアウト", destroy_user_session_path, :method => :delete %>
+    <% else %>
+        <%= link_to "ユーザーを登録する", new_user_registration_path %>
+        <br>
+        <%= link_to "ログインする", new_user_session_path %>
+    <% end %>
+</div>
