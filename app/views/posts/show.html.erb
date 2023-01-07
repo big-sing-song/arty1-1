@@ -1,0 +1,152 @@
+<%= stylesheet_link_tag "show", :media => "all" %>
+<header>
+    <div class="title">
+        <%= link_to posts_path, class:"underlines", method: :get do %>
+            <h1>Arty</h1>
+        <% end %>
+    </div>
+    <div class="search">
+        <%= form_tag({controller:"posts",action:"index",}, method: :get, class: "sform") do %>
+            <%= text_field_tag :search, '', class: "sbox", placeholder:"キーワードを検索" %>
+            <%# <%= submit_tag '検索する', {id: "sbtn"}  %>
+            <%= button_tag sanitize('<i class="fa fa-search"></i>'), :type => "submit", :class =>"sbtn" %>
+        <% end %>
+    </div>
+    <ul class="icons">
+        <li>
+            <%= link_to new_post_path, class:"icon", method: :get do %>
+                <i class="far fa-plus-square"></i>
+            <% end %>
+        </li>
+        <li><% if user_signed_in? %>
+            <%= link_to user_path(current_user.id), class:"icon", method: :get do %>
+                <i class="far fa-user"></i>
+            <% end %>
+            <% end %>
+        </li>
+        <li class="icon">
+            <%= link_to rooms_path, class:"icon", method: :get do %>
+                <i class="far fa-comments"></i>
+            <% end %>
+        </li>
+    </ul>
+</header>
+<div class="main">
+    <div class="tweet-show">
+        <div class="left-show">
+            <% if user_signed_in? %>
+                <% if current_user.already_purchased?(@post) %>
+                    <div>
+                        <%= image_tag(@post.image_url, :alt => @post.contents, :width => 350, :height => 280) %>
+                    </div>
+                        <%# <p>購入済み</p> %>
+                <% else %>
+                    <div class="image">
+                        <%= image_tag(@post.image_url, :alt => @post.contents, :width => 350, :height => 280) %>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+        <div class="right-show">
+            <div class="first-show">
+                <%= image_tag @post.user.image_url, size: "60x60", class:"user-image" if @post.user.image? %>
+                <span class="name"><a class="underlines" href="/users/<%= @post.user.id %>"><%= @post.user.name %></a></span>
+            </div>
+            <div class="second-show">
+                <p><%= @post.contents %></p>
+                <div class="tag-display">
+                    <% @post.tags.each do |tag| %>
+                        <%= link_to "#"+ tag.name, posts_path(name: tag.id), class:"tag-display" %>
+                    <% end %>
+                </div>
+            </div>
+            <div class="third-show">
+                <p><i class="fab fa-bitcoin" style="color: gold;"></i><%= @post.price %></p>
+                <% if user_signed_in? %>
+                    <% if current_user.already_liked?(@post) %>
+                        <%= button_to post_like_path(@post), class:"underlines", method: :delete do %>
+                            <i class="fas fa-heart" style="color: pink;"></i><%= @post.likes.count %>
+                        <% end %>
+                    <% else %>
+                        <%= button_to post_likes_path(@post), class:"underlines", method: :post do %>
+                            <i class="far fa-heart" style="color: pink;"></i><%= @post.likes.count %>
+                        <% end %>
+                    <% end %>
+                <% else %>
+                    <p>いいねの数 = </p><%= @post.likes.count %>
+                <% end %>
+                <p><%= l @post.created_at, format: :default %></p>
+            </div>
+            <div class="fourth-show">
+                <section>
+                    <% if user_signed_in? && current_user.id == @post.user_id %>
+                    <%= link_to edit_post_path(@post.id) do %>
+                        <button type="button" class="btn btn-primary"><i class="far fa-edit"></i></button>
+                    <% end %>
+                    <% end %>
+                </section>
+                <section>
+                    <% if user_signed_in? && current_user.id == @post.user_id %>
+                    <%= button_to post_path(@post.id), class:"btn btn-secondary", method: :delete do %>
+                        <i class="fas fa-trash-alt"></i>
+                    <% end %>
+                    <% end %>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="posts-show-bottom">
+        <div class="comment-wrapper">
+            <h2>コメント</h2>
+            <% @comments.each do |c| %>
+                <div class="comment-name">
+                <%= image_tag c.user.image_url, size: "30x30", class:"user-image" if c.user.image? %><%= c.user.name unless c.user.blank? %>
+                </div>
+                <br>
+                <div>
+                <%= c.content %>
+                </div>
+                <br>
+            <% end %>
+
+            <% if user_signed_in? %>
+                <%= form_with(model: [@post, @comment], local: true) do |f| %>
+                    <%= f.text_area :content, :placeholder => "30文字まで"  %>
+                        <%= button_tag type: "submit button" ,class:"btn btn-success" do %>
+                            コメントする
+                        <% end %>
+                <% end %>
+            <% end %>
+        </div>
+        <div class="liked-user">
+            <h2>いいねしたアカウント</h2>
+            <% @post.liked_users.each do |user| %>
+                <p class="comment-name"><%= image_tag user.image_url, size: "30x30", class:"user-image" if user.image? %><%= user.name %></p>
+            <% end %>
+        </div>
+    </div>
+</div>
+<footer>
+    <% if user_signed_in? %>
+        <% if current_user.already_purchased?(@post) %>
+            <div class="purchase-sentence">
+                <p>購入済<i class="fas fa-star" style="color: yellow;"></i></p>
+            </div>
+        <% else %>
+                <% if current_user.id != @post.user_id %>
+                    <% if current_user.deposit - @post.price >= 0 %>
+                        <div class="purchase-btn">
+                            <%= button_to post_purchases_path(@post), class:"btn btn-radius-solid btn--shadow", method: :post , data: { confirm: "購入しますか？" } do %>
+                            購入！
+                            <% end %>
+                        </div>
+                    <% else %>
+                        <div class="purchase-sentence">
+                            <p>お金が足りません</p>
+                        </div>
+                    <% end %>
+                <% end %>
+        <% end %>
+    <% end %>
+</footer>
+
