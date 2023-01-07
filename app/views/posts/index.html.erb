@@ -1,0 +1,143 @@
+<%= stylesheet_link_tag "index", :media => "all" %>
+
+<style>
+    body {
+        height: 800px;
+        background-size:cover;
+        background-color:rgba(255,255,255,0.5);
+        background-blend-mode:lighten;
+        background-attachment: fixed;
+        <% if params[:name] == "1" %>
+            background-image: url("<%= asset_path('people1.jpg') %>");
+        <% elsif params[:name] == "2" %>
+            background-image: url("<%= asset_path('nature2.jpg') %>");
+        <% elsif params[:name] == "3" %>
+            background-image: url("<%= asset_path('temple1.jpg') %>");
+        <% elsif params[:name] == "4" %>
+            background-image: url("<%= asset_path('sport1.jpg') %>");
+        <% elsif params[:name] == "5" %>
+            background-image: url("<%= asset_path('hobby4.jpg') %>");
+        <% elsif params[:name] == "6" %>
+            background-image: url("<%= asset_path('others4.jpg') %>");
+        <% else %>
+            background-image: url("<%= asset_path('others3.jpg') %>");
+        <% end %>
+    }
+</style>
+<header>
+    <div class="title">
+        <%= link_to posts_path, class:"underlines", method: :get do %>
+            <h1>Arty</h1>
+        <% end %>
+    </div>
+    <div class="btn-group" id="tag-btn">
+    <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-hashtag"></i>
+    </button>
+    <ul class="dropdown-menu">
+        <div class="tag-box">
+            <li><a class="dropdown-item"></a><%= link_to "一覧", posts_path %>&nbsp;&nbsp;<i class="fas fa-angle-right"></i></li>
+        </div>
+        <li><hr class="dropdown-divider"></li>
+        <% @tags.each do |tag| %>
+            <div class="tag-box">
+                <li><a class="dropdown-item"><%= link_to "#"+ tag.name, posts_path(name: tag.id) %></a></li>
+            </div>
+        <% end %>
+    </ul>
+    </div>
+    <div class="search">
+        <%= form_tag({controller:"posts",action:"index",}, method: :get, class: "sform") do %>
+            <%= text_field_tag :search, '', class: "sbox", placeholder:"キーワードを検索" %>
+            <%# <%= submit_tag '検索する', {id: "sbtn"}  %>
+            <%= button_tag sanitize('<i class="fa fa-search"></i>'), :type => "submit", :class =>"sbtn" %>
+        <% end %>
+    </div>
+    <ul class="icons">
+        <li>
+            <%= link_to new_post_path, class:"icon", method: :get do %>
+                <i class="far fa-plus-square"></i>
+            <% end %>
+        </li>
+        <li><% if user_signed_in? %>
+            <%= link_to user_path(current_user.id), class:"icon", method: :get do %>
+                <i class="far fa-user"></i>
+            <% end %>
+            <% end %>
+        </li>
+        <li>
+            <%= link_to rooms_path, class:"icon", method: :get do %>
+                <i class="far fa-comments"></i>
+            <% end %>
+        </li>
+    </ul>
+</header>
+<div class="main">
+    <div class="posts-container">
+        <% @posts.each do |t| %>
+            <div class="post">
+                <div class="left-container">
+                    <div class="image">
+                        <%= image_tag t.image_url, size: "350x280" if t.image? %>
+                    </div>
+                </div>
+                <div class="right-container">
+                    <div class="first-container">
+                        <%= image_tag t.user.image_url, class: "user-image", size: "50x50" if t.user.image?  %>
+                        <span class="name"><a class="underlines" href="/users/<%= t.user.id %>"><%= t.user.name %></a></span>
+                        <%= l t.created_at, format: :default %>
+                    </div>
+                    <div class="second-container">
+                        <%= t.contents.truncate(20) %>
+                        <div>
+                            <% t.tags.each do |tag| %>
+                                <%= link_to "#"+ tag.name, posts_path(name: tag.id), class:"tag-display" %>
+                            <% end %>
+                        </div>
+                    </div>
+                    <div class="third-container">
+                    <section>
+                        <i class="fab fa-bitcoin" style="color: gold;"></i><%= t.price %>
+                    </section>
+                    <section>
+                        <% if user_signed_in? %>
+                            <% if current_user.already_liked?(t) %>
+                                <%= button_to post_like_path(id: t.id, post_id: t.id), class:"underlines", method: :delete do %>
+                                <i class="fas fa-heart" style="color: pink;"></i><%= t.likes.count %>
+                                <% end %>
+                            <% else %>
+                                <%= button_to post_likes_path(id: t.id, post_id: t.id), class:"underlines", method: :post do %>
+                                    <i class="far fa-heart" style="color: pink;"></i><%= t.likes.count %>
+                                <% end %>
+                            <% end %>
+                        <% else %>
+                            <p>いいねの数 = </p><%= t.likes.count %>
+                        <% end %>
+                    </section>
+                    <section>
+                        <%= link_to post_path(t.id), class:"underlines" do %>
+                            <button class="btn btn--red btn--radius btn--cubic">Check  <i class="fas fa-angle-right"></i><i class="fas fa-angle-right"></i></button>
+                            <%# <button>Check!!</button> %>
+                        <% end %>
+                    </section>
+
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<!-- popper -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+
+<!--Bootstrap5用 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
